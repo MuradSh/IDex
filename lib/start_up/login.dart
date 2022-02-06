@@ -77,6 +77,7 @@ class _loginState extends State<login> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Image.asset('assets/logo.png'),
                 Text(
                     "IDex",
                     style: TextStyle(
