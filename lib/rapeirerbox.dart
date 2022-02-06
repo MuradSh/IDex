@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 
 class tile extends StatelessWidget {
   final width;
-  const tile({Key? key, this.width}) : super(key: key);
+  final name;
+  final specialty;
+  final price;
+  final rating;
+  const tile({Key? key, this.width,this.name,this.specialty,this.price,this.rating}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +20,13 @@ class tile extends StatelessWidget {
           Column(
             children: [
               Text(
-                "Murad",
+                name,
                 style: TextStyle(
                     fontSize: 23
                 ),
               ),
               Text(
-                "Plumber",
+                specialty,
                 style: TextStyle(
                     fontSize: 18
                 ),
@@ -32,9 +36,11 @@ class tile extends StatelessWidget {
           SizedBox(
             width: 40,
           ),
-          Center(
-            child: Column(
+          Column(
               children: [
+                SizedBox(
+                  height: 15,
+                ),
                 Padding(
                   padding: EdgeInsets.all(5),
                   child: CircleAvatar(
@@ -44,27 +50,25 @@ class tile extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Icon(Icons.star,color: Colors.orangeAccent,),
-                    Icon(Icons.star,color: Colors.orangeAccent,),
-                    Icon(Icons.star,color: Colors.orangeAccent,),
-                    Icon(Icons.star,color: Colors.orangeAccent,),
-                    Icon(Icons.star,color: Colors.orangeAccent,),],
+                    for(int i=0;i<rating;i++)...{
+                      Icon(Icons.star,color: Colors.orangeAccent,),
+                    }
+                  ],
                 )
-              ],
-            )
+              ]
           ),
           SizedBox(
             width: 40,
           ),
           Column(
             children: [
-              Text("60\$",style: TextStyle(fontSize: 23),),
+              Text(price,style: TextStyle(fontSize: 23),),
               Text("Online",style: TextStyle(fontSize: 20),),],
           )
         ]
       ),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.blueAccent)
+        border: Border(top: BorderSide(width:1, color: Colors.grey))
       ),
     );
   }

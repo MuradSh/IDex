@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:idexx/start_up/login.dart';
 import 'package:idexx/main/discover.dart';
+import 'package:idexx/main/bottombar.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           fontFamily: 'Poppins',
         ),
-        home: const Discover(),
+        home: const bottomNavBar(),
       ),
     );
   }

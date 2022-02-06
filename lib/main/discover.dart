@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:idexx/main/bottombar.dart';
 import 'package:idexx/rapeirerbox.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:idexx/classes/HM.dart';
 
 class Discover extends StatefulWidget {
   const Discover({Key? key}) : super(key: key);
@@ -11,6 +13,7 @@ class Discover extends StatefulWidget {
 
 class _DiscoverState extends State<Discover> {
 
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   var items = [
     'Plumber',
     'Window/Door',
@@ -22,6 +25,37 @@ class _DiscoverState extends State<Discover> {
   late double _mediaWidth;
   var selectedValue = "Plumber";
 
+  List<HM> _ustas=[];
+
+  void _getUstas() async{
+    Query _ustasFB = firestore.collection("handymen");
+    QuerySnapshot querySnapshot = await _ustasFB.get();
+    var list = querySnapshot.docs;
+    list.forEach((element) {
+      dynamic document = element;
+
+      HM _usta = HM(
+        document.id,
+        document['name'],
+        document['specialty'],
+        document['price'],
+        document['rating'],
+      );
+      print(document);
+      if(this.mounted) {
+        setState(() {
+          _ustas.add(_usta);
+          print(_ustas);
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _getUstas();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,34 +68,40 @@ class _DiscoverState extends State<Discover> {
         backgroundColor: Colors.indigoAccent,
       ),
       body: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: DropdownButton(
-                value: selectedValue,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedValue = newValue.toString();
-                  });
-                  print(selectedValue);
-                },
-                items: items.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value,style: TextStyle(fontSize:20)),
-                  );
-                }).toList(),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              SizedBox(
+                height: 20,
               ),
-            ),
-            tile(width: _mediaWidth),
-          ]
+              Center(
+                child: DropdownButton(
+                  value: selectedValue,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedValue = newValue.toString();
+                    });
+                    print(selectedValue);
+                  },
+                  items: items.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value,style: TextStyle(fontSize:20)),
+                    );
+                  }).toList(),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              for(var u in _ustas)...{
+                tile(width: _mediaWidth,name:u.name,specialty: u.specialty,price: u.price,rating: int.parse(u.rating)),
+              },
+            ]
+          ),
         )
       ),
-      bottomNavigationBar: bottomNavBar(),
     );
   }
 }
